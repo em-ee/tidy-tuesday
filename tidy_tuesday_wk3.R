@@ -30,5 +30,10 @@ gmtidy%>%
   ggplot(aes(y = rate, x = country_code, col = country))+
   geom_point()+
   theme(legend.position = "none",
-        axis.text.x = element_text(angle = 45))
+        axis.text.x = element_text(angle = 45))+
+  labs(x = "Country", y = "Mortality rate")+
+  ggtitle("Top 25% suicide rates by country")
+
+ggsave("suicide_rates.png", path = "~/tidy-tuesday/")
+
 

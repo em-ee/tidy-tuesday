@@ -77,3 +77,41 @@ gmtidy%>%
 ggsave("uk_deaths.png", width = 20, height = 10, path = "~/tidy-tuesday/wk3")
 
 
+# look at biggest changes in death rates
+
+gmtidy2<-gmtidy%>%
+  filter(year==1990 | year ==2016)%>%
+  group_by(country, disease)%>%
+  mutate(change = rate[year==1990] - rate[year==2016])
+
+# plot for biggest decreases in death rates
+
+gmtidy2%>%
+  filter(change>=5)%>%
+  filter(country_code!="")%>%
+  ggplot(aes(x = country_code, y = change, fill = country, 
+             group = country))+
+  geom_bar(stat = "identity", position = "dodge")+
+  facet_wrap(~disease, scales = "free_x")+
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45))+
+  labs(y = "Decrease (%)", x = "Country")+
+  ggtitle("Biggest decreases in death rates over time")
+  
+# plot for biggest increases in death rates
+
+gmtidy2%>%
+  filter(change<=-10)%>%
+  filter(country_code!="")%>%
+  ggplot(aes(x = country_code, y = change, fill = country, 
+             group = country))+
+  geom_bar(stat = "identity", position = "dodge")+
+  facet_wrap(~disease, scales = "free_x")+
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45))+
+  labs(y = "Increase (%)", x = "Country")+
+  ggtitle("Biggest increases in death rates over time")
+
+
